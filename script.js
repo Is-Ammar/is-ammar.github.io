@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
     function initializeGame() {
- 
         solution = dictionary[Math.floor(Math.random() * dictionary.length)];
 
         for (let i = 0; i < maxGuesses; i++) {
@@ -32,12 +31,22 @@ document.addEventListener('DOMContentLoaded', () => {
             grid.appendChild(row);
         }
 
-        const keys = 'abcdefghijklmnopqrstuvwxyz';
-        keys.split('').forEach(key => {
-            const button = document.createElement('button');
-            button.textContent = key;
-            button.addEventListener('click', () => handleKeyPress(key));
-            keyboard.appendChild(button);
+        const keyboardLayout = [
+            'qwertyuiop',
+            'asdfghjkl',
+            'zxcvbnm'
+        ];
+
+        keyboardLayout.forEach((row) => {
+            const rowDiv = document.createElement('div');
+            rowDiv.className = 'keyboard-row';
+            row.split('').forEach(key => {
+                const button = document.createElement('button');
+                button.textContent = key;
+                button.addEventListener('click', () => handleKeyPress(key));
+                rowDiv.appendChild(button);
+            });
+            keyboard.appendChild(rowDiv);
         });
 
         document.addEventListener('keydown', (event) => {

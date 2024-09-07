@@ -1,5 +1,7 @@
 #game-container {
     text-align: center;
+    margin: 20px auto;
+    max-width: 600px; 
 }
 
 #grid {
@@ -9,6 +11,7 @@
 
 .row {
     display: flex;
+    justify-content: center;
     margin-bottom: 5px;
 }
 
@@ -38,9 +41,36 @@
     margin-top: 20px;
 }
 
+.keyboard-row {
+    display: flex;
+    justify-content: center; 
+    margin-bottom: 5px;
+}
+
+.keyboard-row:nth-child(2) button {
+    width: 36px; 
+}
+
+.keyboard-row:nth-child(3) button {
+    width: 32px; 
+}
+
 button {
     margin: 2px;
     width: 40px;
     height: 40px;
     font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #e0e0e0;
+}
+
+button:active {
+    background-color: #d0d0d0;
 }
