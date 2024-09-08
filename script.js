@@ -5,13 +5,17 @@ document.addEventListener('DOMContentLoaded', () => {
     let solution = '';
     let currentGuess = '';
     let currentRowIndex = 0;
-    let usedLetters = new Set(); 
+    let usedLetters = new Set();
     let letterStatus = {}; 
 
     const grid = document.getElementById('grid');
     const keyboard = document.getElementById('keyboard');
     const message = document.getElementById('message');
     const modeToggle = document.getElementById('mode-toggle');
+
+    let currentTheme = 'dark';
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    updateModeToggleText();
 
     fetch('wordle.txt')
         .then(response => response.text())
@@ -46,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
             row.split('').forEach(key => {
                 const button = document.createElement('button');
                 button.textContent = key;
-                button.className = 'key'; 
+                button.className = 'key';
                 button.addEventListener('click', () => handleKeyPress(key));
                 rowDiv.appendChild(button);
             });
@@ -75,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.addEventListener('keydown', (event) => {
             if (event.key.length === 1 && event.key.match(/[a-z]/i)) {
-                handleKeyPress(event.key.toLowerCase());
+                handleKeyPress(event.key);
             } else if (event.key === 'Enter') {
                 handleSubmitGuess();
             } else if (event.key === 'Backspace') {
@@ -101,90 +105,84 @@ document.addEventListener('DOMContentLoaded', () => {
 
         cells.forEach((cell, index) => {
             cell.textContent = currentGuess[index] || '';
+            if (index < currentGuess.length) {
+                cell.classList.remove('correct', 'present', 'absent');
+            }
         });
     }
 
     function handleSubmitGuess() {
-        if (currentGuess.length === wordLength) {
-            if (dictionary.includes(currentGuess)) {
-                checkGuess();
-            } else {
-                message.textContent = 'Not a valid word.';
-            }
+        if (currentGuess.length !== wordLength) {
+            message.textContent = `Guess must be ${wordLength} letters`;
+            return;
         }
-    }
 
-    function checkGuess() {
-        const correct = solution.split('');
-        const guess = currentGuess.split('');
-
-        const feedback = [];
-        guess.forEach((letter, index) => {
-            if (correct[index] === letter) {
-                feedback.push('correct');
-                letterStatus[letter] = 'correct'; 
-            } else if (correct.includes(letter)) {
-                feedback.push('present');
-                letterStatus[letter] = 'present'; 
-            } else {
-                feedback.push('absent');
-                letterStatus[letter] = 'absent'; 
-                usedLetters.add(letter);
-            }
-        });
-
-        updateFeedback(feedback);
-        updateKeyboard();
-
-        if (currentGuess === solution) {
-            message.textContent = 'Congratulations! You guessed the word!';
-        } else {
-            currentGuess = '';
-            currentRowIndex++;
-            if (currentRowIndex >= maxGuesses) {
-                message.textContent = `Game Over! The correct word was ${solution}.`;
-            } else {
-                updateGrid(); 
-            }
+        if (!dictionary.includes(currentGuess)) {
+            message.textContent = 'Not in word list';
+            return;
         }
-    }
 
-    function updateFeedback(feedback) {
         const currentRow = grid.querySelectorAll('.row')[currentRowIndex];
         const cells = currentRow.querySelectorAll('.cell');
 
-        feedback.forEach((status, index) => {
-            cells[index].className = `cell ${status}`;
+        let correctCount = 0;
+        let guessStatus = [];
+
+        currentGuess.split('').forEach((letter, index) => {
+            if (letter === solution[index]) {
+                cells[index].classList.add('correct');
+                correctCount++;
+                guessStatus.push('correct');
+                letterStatus[letter] = 'correct'; 
+            } else if (solution.includes(letter)) {
+                cells[index].classList.add('present');
+                guessStatus.push('present');
+                if (!letterStatus[letter]) letterStatus[letter] = 'present'; 
+            } else {
+                cells[index].classList.add('absent');
+                guessStatus.push('absent');
+                if (!letterStatus[letter]) letterStatus[letter] = 'absent'; 
+            }
         });
+
+        usedLetters = new Set([...usedLetters, ...currentGuess.split('')]);
+
+        updateKeyboardColors();
+
+        if (correctCount === wordLength) {
+            message.textContent = 'Congratulations! You guessed the word!';
+        } else if (currentRowIndex < maxGuesses - 1) {
+            currentRowIndex++;
+            currentGuess = '';
+            updateGrid();
+        } else {
+            message.textContent = `Game over! The word was ${solution}`;
+        }
     }
 
-    function updateKeyboard() {
-        const keys = document.querySelectorAll('.key');
-        keys.forEach(key => {
+    function updateKeyboardColors() {
+        document.querySelectorAll('.key').forEach(key => {
             const letter = key.textContent;
-            if (letterStatus[letter]) {
-                switch (letterStatus[letter]) {
-                    case 'correct':
-                        key.style.backgroundColor = 'var(--correct-bg)';
-                        key.style.color = 'var(--correct-text)';
-                        break;
-                    case 'present':
-                        key.style.backgroundColor = 'var(--present-bg)';
-                        key.style.color = 'black'; 
-                        break;
-                    case 'absent':
-                        key.style.backgroundColor = 'var(--absent-bg)';
-                        key.style.color = 'white'; 
-                        break;
-                }         
+            key.classList.remove('correct', 'present', 'absent');
+            if (letterStatus[letter] === 'correct') {
+                key.classList.add('correct');
+            } else if (letterStatus[letter] === 'present') {
+                key.classList.add('present');
+            } else if (letterStatus[letter] === 'absent') {
+                key.classList.add('absent');
             }
         });
     }
 
     function toggleMode() {
-        const body = document.body;
-        const isDarkMode = body.getAttribute('data-theme') === 'dark';
-        body.setAttribute('data-theme', isDarkMode ? 'light' : 'dark');
-        modeToggle.textContent = isDarkMode ? ' Dark Theme' : ' Light Theme';
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        updateModeToggleText();
+    }
+
+    function updateModeToggleText() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        modeToggle.textContent = currentTheme === 'dark' ? 'Light Theme' : 'Dark Theme';
     }
 });

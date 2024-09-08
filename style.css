@@ -1,23 +1,5 @@
-:root {
-    --background-color: #f0f0f0;
-    --text-color: #333;
-    --cell-border: #ccc;
-    --correct-bg: green;
-    --correct-text: white;
-    --present-bg: yellow;
-    --absent-bg: gray;
-    --button-bg: #f0f0f0;
-    --button-border: #ccc;
-    --button-text: #333;
-    --button-disabled-bg: #707070;
-    --button-disabled-text: #404040;
-    --action-button-bg: #d0d0d0;
-    --mode-toggle-bg: #d0d0d0;
-    --mode-toggle-border: #ccc;
-    --mode-toggle-text: #333;
-}
 
-[data-theme="dark"] {
+:root {
     --background-color: #333;
     --text-color: #f0f0f0;
     --cell-border: #666;
@@ -36,6 +18,26 @@
     --mode-toggle-text: #f0f0f0;
 }
 
+
+[data-theme="light"] {
+    --background-color: #f0f0f0;
+    --text-color: #333;
+    --cell-border: #ccc;
+    --correct-bg: green;
+    --correct-text: white;
+    --present-bg: yellow;
+    --absent-bg: gray;
+    --button-bg: #f0f0f0;
+    --button-border: #ccc;
+    --button-text: #333;
+    --button-disabled-bg: #707070;
+    --button-disabled-text: #404040;
+    --action-button-bg: #d0d0d0;
+    --mode-toggle-bg: #d0d0d0;
+    --mode-toggle-border: #ccc;
+    --mode-toggle-text: #333;
+}
+
 body {
     background-color: var(--background-color);
     color: var(--text-color);
@@ -51,7 +53,7 @@ body {
     background-color: var(--background-color);
     color: var(--text-color);
     padding: 20px;
-    position: relative; 
+    position: relative;
 }
 
 #grid {
