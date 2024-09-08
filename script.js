@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentGuess = '';
     let currentRowIndex = 0;
     let usedLetters = new Set(); 
+    let letterStatus = {}; 
 
     const grid = document.getElementById('grid');
     const keyboard = document.getElementById('keyboard');
@@ -118,10 +119,13 @@ document.addEventListener('DOMContentLoaded', () => {
         guess.forEach((letter, index) => {
             if (correct[index] === letter) {
                 feedback.push('correct');
+                letterStatus[letter] = 'correct'; 
             } else if (correct.includes(letter)) {
                 feedback.push('present');
+                letterStatus[letter] = 'present'; 
             } else {
                 feedback.push('absent');
+                letterStatus[letter] = 'absent'; 
                 usedLetters.add(letter);
             }
         });
@@ -154,9 +158,22 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateKeyboard() {
         const keys = document.querySelectorAll('.key');
         keys.forEach(key => {
-            if (usedLetters.has(key.textContent)) {
-                key.classList.add('disabled');
-                key.disabled = true; 
+            const letter = key.textContent;
+            if (letterStatus[letter]) {
+                switch (letterStatus[letter]) {
+                    case 'correct':
+                        key.style.backgroundColor = 'green';
+                        key.style.color = 'white';
+                        break;
+                    case 'present':
+                        key.style.backgroundColor = 'yellow';
+                        key.style.color = 'black';
+                        break;
+                    case 'absent':
+                        key.style.backgroundColor = 'gray';
+                        key.style.color = 'white';
+                        break;
+                }         
             }
         });
     }
