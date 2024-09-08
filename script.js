@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const grid = document.getElementById('grid');
     const keyboard = document.getElementById('keyboard');
     const message = document.getElementById('message');
+    const modeToggle = document.getElementById('mode-toggle');
 
     fetch('wordle.txt')
         .then(response => response.text())
@@ -74,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.addEventListener('keydown', (event) => {
             if (event.key.length === 1 && event.key.match(/[a-z]/i)) {
-                handleKeyPress(event.key);
+                handleKeyPress(event.key.toLowerCase());
             } else if (event.key === 'Enter') {
                 handleSubmitGuess();
             } else if (event.key === 'Backspace') {
@@ -82,6 +83,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateGrid();
             }
         });
+
+        modeToggle.addEventListener('click', toggleMode);
     }
 
     function handleKeyPress(key) {
@@ -162,19 +165,26 @@ document.addEventListener('DOMContentLoaded', () => {
             if (letterStatus[letter]) {
                 switch (letterStatus[letter]) {
                     case 'correct':
-                        key.style.backgroundColor = 'green';
-                        key.style.color = 'white';
+                        key.style.backgroundColor = 'var(--correct-bg)';
+                        key.style.color = 'var(--correct-text)';
                         break;
                     case 'present':
-                        key.style.backgroundColor = 'yellow';
-                        key.style.color = 'black';
+                        key.style.backgroundColor = 'var(--present-bg)';
+                        key.style.color = 'black'; 
                         break;
                     case 'absent':
-                        key.style.backgroundColor = 'gray';
-                        key.style.color = 'white';
+                        key.style.backgroundColor = 'var(--absent-bg)';
+                        key.style.color = 'white'; 
                         break;
                 }         
             }
         });
+    }
+
+    function toggleMode() {
+        const body = document.body;
+        const isDarkMode = body.getAttribute('data-theme') === 'dark';
+        body.setAttribute('data-theme', isDarkMode ? 'light' : 'dark');
+        modeToggle.textContent = isDarkMode ? ' Dark Theme' : ' Light Theme';
     }
 });
