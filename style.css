@@ -49,8 +49,7 @@
 
 .keyboard-row:nth-child(1) button,
 .keyboard-row:nth-child(2) button,
-.keyboard-row:nth-child(3) button 
-{
+.keyboard-row:nth-child(3) button {
     width: 40px;
     height: 40px;
     font-size: 16px;
@@ -79,6 +78,13 @@ button:hover {
 
 button:active {
     background-color: #d0d0d0;
+}
+
+button.disabled {
+    background-color: #707070; 
+    color: #404040; 
+    cursor: not-allowed;
+    border: 1px solid #505050;
 }
 
 .action-button {

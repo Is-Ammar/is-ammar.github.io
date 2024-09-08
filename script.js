@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let solution = '';
     let currentGuess = '';
     let currentRowIndex = 0;
+    let usedLetters = new Set(); 
 
     const grid = document.getElementById('grid');
     const keyboard = document.getElementById('keyboard');
@@ -43,12 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
             row.split('').forEach(key => {
                 const button = document.createElement('button');
                 button.textContent = key;
+                button.className = 'key'; 
                 button.addEventListener('click', () => handleKeyPress(key));
                 rowDiv.appendChild(button);
             });
             keyboard.appendChild(rowDiv);
         });
-
 
         const actionRow = document.createElement('div');
         actionRow.className = 'keyboard-row';
@@ -121,10 +122,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 feedback.push('present');
             } else {
                 feedback.push('absent');
+                usedLetters.add(letter);
             }
         });
 
         updateFeedback(feedback);
+        updateKeyboard();
 
         if (currentGuess === solution) {
             message.textContent = 'Congratulations! You guessed the word!';
@@ -145,6 +148,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         feedback.forEach((status, index) => {
             cells[index].className = `cell ${status}`;
+        });
+    }
+
+    function updateKeyboard() {
+        const keys = document.querySelectorAll('.key');
+        keys.forEach(key => {
+            if (usedLetters.has(key.textContent)) {
+                key.classList.add('disabled');
+                key.disabled = true; 
+            }
         });
     }
 });
