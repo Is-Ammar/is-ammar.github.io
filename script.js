@@ -49,6 +49,27 @@ document.addEventListener('DOMContentLoaded', () => {
             keyboard.appendChild(rowDiv);
         });
 
+
+        const actionRow = document.createElement('div');
+        actionRow.className = 'keyboard-row';
+
+        const submitButton = document.createElement('button');
+        submitButton.textContent = 'Submit';
+        submitButton.className = 'action-button';
+        submitButton.addEventListener('click', handleSubmitGuess);
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.className = 'action-button';
+        deleteButton.addEventListener('click', () => {
+            currentGuess = currentGuess.slice(0, -1);
+            updateGrid();
+        });
+
+        actionRow.appendChild(deleteButton);
+        actionRow.appendChild(submitButton);
+        keyboard.appendChild(actionRow);
+
         document.addEventListener('keydown', (event) => {
             if (event.key.length === 1 && event.key.match(/[a-z]/i)) {
                 handleKeyPress(event.key);
