@@ -143,7 +143,7 @@ body {
 .keyboard-row:nth-child(1) button,
 .keyboard-row:nth-child(2) button,
 .keyboard-row:nth-child(3) button {
-    width: 40px;
+    width: 38px;
     height: 40px;
     font-size: 16px;
     transition: background-color 1s, color 0.8s; 
@@ -256,15 +256,13 @@ button.disabled {
     top: 10px;
     left: 10px;
     padding: 5px 10px;
-    color: var(--button-text);
+    border: 1px solid var(--mode-toggle-border);
+    background-color: var(--mode-toggle-bg);
+    color: var(--mode-toggle-text);
+    border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
-    transition: background-color 0.2s, color 0.2s, transform 0.3s; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    z-index: 1000; 
+    transition: background-color 0.2s, color 0.8s, transform 0.8s;
 }
 
 #mute-toggle:hover {
