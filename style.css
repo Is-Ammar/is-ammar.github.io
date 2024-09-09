@@ -143,18 +143,18 @@ body {
 .keyboard-row:nth-child(1) button,
 .keyboard-row:nth-child(2) button,
 .keyboard-row:nth-child(3) button {
-    width: 38px;
+    width: 34px;
     height: 40px;
     font-size: 16px;
     transition: background-color 1s, color 0.8s; 
 }
 
 .keyboard-row:nth-child(2) button {
-    width: 36px;
+    width: 32px;
 }
 
 .keyboard-row:nth-child(3) button {
-    width: 32px;
+    width: 30px;
 }
 
 button {
