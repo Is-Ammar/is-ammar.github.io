@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentRowIndex = 0;
     let usedLetters = new Set();
     let letterStatus = {}; 
-    let submittedRows = new Set(); // Track submitted rows
+    let submittedRows = new Set(); 
 
     const grid = document.getElementById('grid');
     const keyboard = document.getElementById('keyboard');
@@ -66,15 +66,15 @@ document.addEventListener('DOMContentLoaded', () => {
         actionRow.className = 'keyboard-row';
 
         const submitButton = document.createElement('button');
-        submitButton.textContent = 'Submit';
-        submitButton.className = 'action-button';
+        submitButton.textContent = 'Ent';
+        submitButton.className = 'action-button submit-button'; 
         submitButton.addEventListener('click', handleSubmitGuess);
 
         const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete';
-        deleteButton.className = 'action-button';
+        deleteButton.textContent = 'Del';
+        deleteButton.className = 'action-button delete-button'; 
         deleteButton.addEventListener('click', () => {
-            if (currentRowIndex < maxGuesses - 1 && !submittedRows.has(currentRowIndex)) {
+            if (currentGuess.length > 0 && !submittedRows.has(currentRowIndex)) {
                 currentGuess = currentGuess.slice(0, -1);
                 updateGrid();
             }
@@ -85,12 +85,12 @@ document.addEventListener('DOMContentLoaded', () => {
         keyboard.appendChild(actionRow);
 
         document.addEventListener('keydown', (event) => {
-            if (event.key.length === 1 && event.key.match(/[a-z]/i)) {
+            if (event.key.length === 1 && event.key.match(/[a-z]/i) && !submittedRows.has(currentRowIndex)) {
                 handleKeyPress(event.key);
             } else if (event.key === 'Enter') {
                 handleSubmitGuess();
-            } else if (event.key === 'Backspace') {
-                if (currentRowIndex < maxGuesses - 1 && !submittedRows.has(currentRowIndex)) {
+            } else if (event.key === 'Backspace' && !submittedRows.has(currentRowIndex)) {
+                if (currentGuess.length > 0) {
                     currentGuess = currentGuess.slice(0, -1);
                     updateGrid();
                 }
@@ -122,13 +122,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 cell.classList.remove('correct', 'present', 'absent');
             }
         });
-        
-        const deleteButton = document.querySelector('.action-button:contains("Delete")');
-        if (submittedRows.has(currentRowIndex)) {
-            deleteButton.disabled = true;
-        } else {
-            deleteButton.disabled = false;
-        }
+
+        const deleteButton = document.querySelector('.delete-button');
+        deleteButton.disabled = currentGuess.length === 0 || submittedRows.has(currentRowIndex);
     }
 
     function handleSubmitGuess() {
@@ -146,30 +142,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const cells = currentRow.querySelectorAll('.cell');
 
         let correctCount = 0;
-        let guessStatus = [];
-
         currentGuess.split('').forEach((letter, index) => {
             if (letter === solution[index]) {
                 cells[index].classList.add('correct');
                 correctCount++;
-                guessStatus.push('correct');
                 letterStatus[letter] = 'correct'; 
             } else if (solution.includes(letter)) {
                 cells[index].classList.add('present');
-                guessStatus.push('present');
-                if (!letterStatus[letter]) letterStatus[letter] = 'present'; 
+                letterStatus[letter] = 'present'; 
             } else {
                 cells[index].classList.add('absent');
-                guessStatus.push('absent');
-                if (!letterStatus[letter]) letterStatus[letter] = 'absent'; 
+                letterStatus[letter] = 'absent'; 
             }
         });
 
         usedLetters = new Set([...usedLetters, ...currentGuess.split('')]);
-
         updateKeyboardColors();
-
-        submittedRows.add(currentRowIndex); 
+        submittedRows.add(currentRowIndex);
 
         if (correctCount === wordLength) {
             message.textContent = 'Congratulations! You guessed the word!';
@@ -220,6 +209,6 @@ document.addEventListener('DOMContentLoaded', () => {
             muteIcon.classList.add('fa-volume-mute');
             muteText.textContent = ' ';
         }
-        console.log('Audio muted:', backgroundMusic.muted);
+        // console.log('Audio muted:', backgroundMusic.muted);
     }
 });
