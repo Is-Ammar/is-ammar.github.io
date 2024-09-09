@@ -69,8 +69,11 @@ document.addEventListener('DOMContentLoaded', () => {
         deleteButton.textContent = 'Delete';
         deleteButton.className = 'action-button';
         deleteButton.addEventListener('click', () => {
-            currentGuess = currentGuess.slice(0, -1);
-            updateGrid();
+            if (currentGuess.length > 0) {
+                currentGuess = currentGuess.slice(0, -1);
+                updateGrid();
+                updateDeleteButtonState();
+            }
         });
 
         actionRow.appendChild(deleteButton);
@@ -83,8 +86,11 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (event.key === 'Enter') {
                 handleSubmitGuess();
             } else if (event.key === 'Backspace') {
-                currentGuess = currentGuess.slice(0, -1);
-                updateGrid();
+                if (currentGuess.length > 0) {
+                    currentGuess = currentGuess.slice(0, -1);
+                    updateGrid();
+                    updateDeleteButtonState();
+                }
             }
         });
 
@@ -155,6 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
             currentRowIndex++;
             currentGuess = '';
             updateGrid();
+            updateDeleteButtonState();
         } else {
             message.textContent = `Game over! The word was ${solution}`;
         }
@@ -184,5 +191,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateModeToggleText() {
         const currentTheme = document.documentElement.getAttribute('data-theme');
         modeToggle.textContent = currentTheme === 'dark' ? 'Light Theme' : 'Dark Theme';
+    }
+
+    function updateDeleteButtonState() {
+        const deleteButton = document.querySelector('.action-button[textContent="Delete"]');
+        deleteButton.disabled = currentGuess.length === 0;
     }
 });
