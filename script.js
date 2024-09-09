@@ -94,10 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         modeToggle.addEventListener('click', toggleMode);
 
-        // Mute button functionality
         muteToggle.addEventListener('click', toggleMute);
 
-        // Debugging: Check if audio is loaded and playing
         console.log('Audio element:', backgroundMusic);
         console.log('Audio muted:', backgroundMusic.muted);
     }
