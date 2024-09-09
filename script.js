@@ -12,6 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const keyboard = document.getElementById('keyboard');
     const message = document.getElementById('message');
     const modeToggle = document.getElementById('mode-toggle');
+    const muteToggle = document.getElementById('mute-toggle');
+    const backgroundMusic = document.getElementById('background-music');
+    const muteIcon = document.getElementById('mute-icon');
+    const muteText = document.getElementById('mute-text');
 
     let currentTheme = 'dark';
     document.documentElement.setAttribute('data-theme', currentTheme);
@@ -69,11 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
         deleteButton.textContent = 'Delete';
         deleteButton.className = 'action-button';
         deleteButton.addEventListener('click', () => {
-            if (currentGuess.length > 0) {
-                currentGuess = currentGuess.slice(0, -1);
-                updateGrid();
-                updateDeleteButtonState();
-            }
+            currentGuess = currentGuess.slice(0, -1);
+            updateGrid();
         });
 
         actionRow.appendChild(deleteButton);
@@ -86,15 +87,19 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (event.key === 'Enter') {
                 handleSubmitGuess();
             } else if (event.key === 'Backspace') {
-                if (currentGuess.length > 0) {
-                    currentGuess = currentGuess.slice(0, -1);
-                    updateGrid();
-                    updateDeleteButtonState();
-                }
+                currentGuess = currentGuess.slice(0, -1);
+                updateGrid();
             }
         });
 
         modeToggle.addEventListener('click', toggleMode);
+
+        // Mute button functionality
+        muteToggle.addEventListener('click', toggleMute);
+
+        // Debugging: Check if audio is loaded and playing
+        console.log('Audio element:', backgroundMusic);
+        console.log('Audio muted:', backgroundMusic.muted);
     }
 
     function handleKeyPress(key) {
@@ -161,7 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
             currentRowIndex++;
             currentGuess = '';
             updateGrid();
-            updateDeleteButtonState();
         } else {
             message.textContent = `Game over! The word was ${solution}`;
         }
@@ -193,8 +197,18 @@ document.addEventListener('DOMContentLoaded', () => {
         modeToggle.textContent = currentTheme === 'dark' ? 'Light Theme' : 'Dark Theme';
     }
 
-    function updateDeleteButtonState() {
-        const deleteButton = document.querySelector('.action-button[textContent="Delete"]');
-        deleteButton.disabled = currentGuess.length === 0;
+    function toggleMute() {
+        if (backgroundMusic.muted) {
+            backgroundMusic.muted = false;
+            muteIcon.classList.remove('fa-volume-mute');
+            muteIcon.classList.add('fa-volume-up');
+            muteText.textContent = ' ';
+        } else {
+            backgroundMusic.muted = true;
+            muteIcon.classList.remove('fa-volume-up');
+            muteIcon.classList.add('fa-volume-mute');
+            muteText.textContent = ' ';
+        }
+        console.log('Audio muted:', backgroundMusic.muted);
     }
 });

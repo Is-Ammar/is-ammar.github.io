@@ -251,3 +251,41 @@ button.disabled {
     background-color: var(--absent-bg);
     color: var(--text-color);
 }
+#mute-toggle {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 5px 10px;
+    color: var(--button-text);
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s, color 0.2s, transform 0.3s; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    z-index: 1000; 
+}
+
+#mute-toggle:hover {
+    background-color: var(--button-bg);
+    opacity: 0.8;
+}
+
+#mute-toggle:active {
+    background-color: var(--button-bg);
+    opacity: 0.6;
+}
+
+#mute-toggle:focus {
+    outline: none;
+    transform: scale(1.05);
+}
+
+#mute-icon {
+    font-size: 20px;
+}
+
+#mute-text {
+    font-size: 16px;
+}

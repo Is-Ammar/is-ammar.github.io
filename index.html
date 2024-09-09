@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wordle By Sma3ine</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div id="game-container">
@@ -13,7 +14,12 @@
         <div id="keyboard"></div>
         <div id="message"></div>
         <button id="mode-toggle" class="action-button"> Dark Theme</button>
+        <button id="mute-toggle" class="action-button">
+            <i id="mute-icon" class="fas fa-volume-up"></i>
+            <span id="mute-text"></span>
+        </button>
     </div>
+    <audio id="background-music" src="/components/bgmusic.mp3" autoplay loop></audio>
     <script src="script.js"></script>
 </body>
 </html>
