@@ -13,5 +13,5 @@ Welcome to the Wordle Game! This is a classic word puzzle game built with JavaSc
 
 To get started with the Wordle game 
 
-1. **link to try**
+**link to try**
    https://is-ammar.github.io/wordle
